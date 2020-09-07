@@ -1,0 +1,27 @@
+{
+  "name": "oeproductions",
+  "version": "1.0.0",
+  "main": "myApp.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "csurf": "^1.11.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OskarEek/OEProductions.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OskarEek/OEProductions/issues"
+  },
+  "homepage": "https://github.com/OskarEek/OEProductions#readme",
+  "description": ""
+}
