@@ -3,7 +3,7 @@ const exphbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 const bodyParser = require("body-parser");
-
+const cors = require("cors");
 // Constants
 const PORT = 8080;
 const HOST = '0.0.0.0';
@@ -18,6 +18,13 @@ app.engine('hbs', exphbs({
     layoutsDir: __dirname + '/views/layouts/',
     partialsDir: __dirname + '/views/partials/'
 }));
+
+
+app.use(cors());
+
+//routes
+require("./app/routes/users")(app)
+
 
 app.set('views', './views/');
 app.set('view engine', 'hbs');
@@ -45,6 +52,5 @@ app.use((req, res, next) => {
 app.get("/", function (request, response) {
     response.render("home.hbs")
 })
-
 
 app.listen(PORT, HOST);
