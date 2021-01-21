@@ -1,0 +1,3 @@
+# StockRecapApp
+
+#made for investors
