@@ -1,5 +1,6 @@
 const User = require("../models/users");
-
+const Login = require("../models/login");
+const loginController = require("./loginController");
 // Create and Save a new Customer
 exports.create = (req, res) => {
   // Validate request
@@ -12,6 +13,7 @@ exports.create = (req, res) => {
   // Create a Customer
   const user = new User({
     email: req.body.email,
+    password: req.body.password,
     firstName: req.body.firstName,
     lastName: req.body.lastName
   });
@@ -19,13 +21,19 @@ exports.create = (req, res) => {
   // Save Customer in the database
   User.create(user, (err, data) => {
     if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the User."
-      });
+      if (err.kind === "Email used!"){
+        const model = {
+          title: "Create!", notif: {type: "Email used!", message: "This email is already used!"}
+        }
+        res.render("usersCreate.hbs", model)
+      }else {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the User."
+        });
+      }
     else {
-      const model = {data: data}
-      res.render("home.hbs", model)
+      loginController.login();
     }
   });
 };
@@ -39,8 +47,11 @@ exports.findAll = (req, res) => {
               err.message || "Some error occurred while retrieving users."
           });
       else {
-        const model = {users: data};
-        console.log(model)
+        const model = {
+          title: "All users!",
+          users: data
+        };
+        console.log(model);
         res.render("usersAll.hbs", model);
       }
   });

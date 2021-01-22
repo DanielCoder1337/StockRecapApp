@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col">
+        <h4 class="mb-3">Mass Email</h4>
+        <form class="needs-validation" action="/sendEmail" method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+            <div class="mb-3">
+                <label for="Hub name">Rubric</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="emailRubric" id="hub_name" placeholder="Welcome to D.E Investor!"
+                        required="true">
+                    <div class="invalid-feedback" style="width: 100%;">
+                        A rubric is required.
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="Description">Main content of the email</label>
+                <div class="input-group">
+                    <textarea type="text" class="form-control" id="description" name="emailContent" rows="3"
+                        placeholder="Lorem Ipsum has been the industry'sstandard dummy text ever since the 1500s,
+                        when an unknown printertook a galley of type and scrambled it to make a type specimen book."
+                        required="true"></textarea>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Content is required for the email.
+                    </div>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-secondary btn-lg btn-block" type="submit">Send email</button>
+        </form>
+    </div>
+</div>
