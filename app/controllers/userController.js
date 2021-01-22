@@ -23,20 +23,29 @@ exports.create = (req, res) => {
         message:
           err.message || "Some error occurred while creating the User."
       });
-    else res.send(data);
+    else {
+      const model = {data: data}
+      res.render("home.hbs", model)
+    }
   });
 };
 
 // Retrieve all Customers from the database.
 exports.findAll = (req, res) => {
   User.getAll((err, data) => {
-        if (err)
-            res.status(500).send({
-            message:
-                err.message || "Some error occurred while retrieving users."
-            });
-        else res.send(data);
-    });
+      if (err)
+          res.status(500).send({
+          message:
+              err.message || "Some error occurred while retrieving users."
+          });
+      else {
+        const model = {users: data};
+        console.log(model)
+        res.render("usersAll.hbs", model);
+      }
+  });
+
+
 };
 
 // Find a single Customer with a customerId

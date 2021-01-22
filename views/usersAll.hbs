@@ -1,0 +1,10 @@
+<h1>All Users</h1>
+
+{{#if users.length}}
+    <ul>
+        {{#each users}}
+            <li>{{firstName}} {{lastName}}</li>
+            <li>{{email}}</li>
+        {{/each}}
+    </ul>
+{{/if}}
