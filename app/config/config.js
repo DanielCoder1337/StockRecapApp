@@ -1,6 +1,6 @@
 module.exports = {
-    HOST: "0.0.0.0",
+    HOST: "83.252.191.213",
     USER: "root",
-    PASSWORD: "danneifk1",
+    PASSWORD: "test123",
     DB: "investordb"
 };
