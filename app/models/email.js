@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
 const User = require("./users");
+require("dotenv").config()
+
 // constructor
 
 const transporter = nodemailer.createTransport({
@@ -9,10 +11,10 @@ const transporter = nodemailer.createTransport({
   auth: {
     type: "OAuth2",
     user: "danielekeroth123321@gmail.com",
-    clientId: "946168617917-n8q2dn1e0q8mlsbhndm2h3spggnj9obk.apps.googleusercontent.com",
-    clientSecret: "HPc-3iXOJ2Nx2Q4r5fOueNQz",
-    refreshToken: "1//042f6a8rHAhBMCgYIARAAGAQSNwF-L9IrC8mfVvbK1a8Kb8uGG0zxjFghF_CBp-V2Q5JbfTBPE12PmsqOc76mOt7IeAf0SkEBE0A",
-    accessToken: "ya29.a0AfH6SMABo4sx9MhxkWVRrjaeuGihK7o7CaeDauFQ_vF3vyAslV_JKqtc6TeaElRUzXQgLLiLK2WmMkTnIjhzOIF2UhwrsCxtGLmpYYu1YW5oCwoBYZh3DxK_mzxyxWYSrT6dDb_Extr-q-Hr1MibWwuM6S6zKwOCQ42_1N7RuIU"
+    clientId: process.env.CLIENTID,
+    clientSecret: process.env.CLIENTSECRET,
+    refreshToken: process.env.REFRESHTOKEN,
+    accessToken: process.env.ACCESSTOKEN
   }
 });
 
@@ -40,7 +42,6 @@ class Email {
             else allEmails += email + ","
           }
         }
-        console.log(allEmails)
         const mailData = {
           from: "danielekeroth123321@gmail.com",  // sender address
           to: allEmails,   // list of receivers

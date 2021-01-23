@@ -37,8 +37,7 @@ exports.login = (req,res) => {
 exports.logout = (req, res) => {
     req.session.loggedIn = false;
     req.session.user = null;
-    res.locals.loggedIn = req.session.loggedIn
-    res.locals.user = req.session.user
+    req.session.admin = false;
     res.redirect("/");
 }
 

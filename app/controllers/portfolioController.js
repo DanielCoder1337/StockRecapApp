@@ -68,11 +68,27 @@ exports.findOne = (req, res) => {
             }
             res.render("home.hbs",model)
         } else{
-            const model = {
-                portfolio: data
+            if (res.locals.loggedIn){
+                Investment.profit(res.locals.user.id,req.params.portfolioId, (err,result)=>{
+                    if (err && err.kind == "Not found in this portfolio"){
+                        const model = {
+                            portfolio: data,
+                            activeInvestor: false
+                        }
+                        res.render("portfolio.hbs", model)
+                        return;
+                    }
+                    else {
+                        const model = {
+                            portfolio: data,
+                            profitData:result,
+                            activeInvestor: true
+                        }
+                        res.render("portfolio.hbs", model)
+                        return;
+                    }
+                })
             }
-            res.render("portfolio.hbs", model)
-            return;
         }
     });
 };
