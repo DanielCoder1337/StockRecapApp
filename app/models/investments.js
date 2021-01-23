@@ -1,6 +1,5 @@
 const sql = require("./db");
 const User = require("./users");
-const Portfolio = require("./portfolios");
 // constructor
 class Investment {
   constructor(investmentInformation) {
@@ -33,6 +32,51 @@ class Investment {
             )
           }
         });
+      }
+    })
+  }
+  static profit(userId,portfolioId, result){
+    const Portfolio = require("./portfolios");
+    Portfolio.findUserInPortfolio(portfolioId,userId, (err,res)=>{
+      if (!err){
+        sql.query(
+          "SELECT * FROM investments WHERE portfolioId = ? ORDER BY date ASC", [portfolioId], (err,allInvestments)=>{
+            Portfolio.findById(portfolioId, (err,portResult)=>{
+              const currentPortfolioValue = portResult.value
+              var userInvestedTotal = 0;
+              var totalInvested = 0;
+              var lastCountedAt = 0;
+              var profit = 0;
+              for (var i = 0; i < allInvestments.length; i++){
+                if (allInvestments[i].userId == userId){ // calculate profits to this point
+                  totalInvested+= allInvestments[i].value
+                  userInvestedTotal+= allInvestments[i].value
+                  let margin = ((allInvestments[i+1].portfolioValue - allInvestments[i+1].value) - totalInvested) - lastCountedAt;
+                  if (margin != 0) lastCountedAt = allInvestments[i].portfolioValue + margin;
+                  let userCut = userInvestedTotal / totalInvested;
+                  profit += margin * userCut;
+                }
+                else if (i == allInvestments.length-1){
+                  totalInvested+= allInvestments[i].value
+                  let margin = currentPortfolioValue - (totalInvested + lastCountedAt);
+                  lastCountedAt = allInvestments[i].portfolioValue + margin;
+                  let userCut = userInvestedTotal / totalInvested;
+                  profit += margin * userCut;
+                }
+                else {
+                  totalInvested+= allInvestments[i].value
+                }
+              }
+              totalInvested = totalInvested.toFixed(2);
+              profit = profit.toFixed(2);
+              userInvestedTotal = userInvestedTotal.toFixed(2);
+              result(null, {profit, totalInvested, userInvestedTotal})
+            })
+          }
+        )
+      }
+      else{
+        result({kind: "Not found in this portfolio"},null)
       }
     })
   }
