@@ -1,6 +1,9 @@
+require("dotenv").config()
+
+
 module.exports = {
-    HOST: "83.252.191.213",
+    HOST: process.env.DATABASEIP,
     USER: "root",
-    PASSWORD: "test123",
+    PASSWORD: process.env.DATABASEPASSWORD,
     DB: "investordb"
 };
