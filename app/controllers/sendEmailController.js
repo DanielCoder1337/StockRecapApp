@@ -16,6 +16,7 @@ exports.sendEmail = (req,res) => {
     if (res.locals.admin){
         Email.sendEmail(information, (err,result) => {
             if (err){
+                console.log(err)
                 const model = {
                     notif:{type: 'danger', message: "Could not send emails!"}
                 }
@@ -28,5 +29,11 @@ exports.sendEmail = (req,res) => {
                 res.render("home.hbs", model)
             }
         });
+    }
+    else {
+        const model = {
+            notif: {type: 'danger', message: "Only admins can send emails!"}
+        }
+        res.render("home.hbs",model)
     }
 }

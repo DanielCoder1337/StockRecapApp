@@ -13,22 +13,29 @@
             </li>
             {{#if loggedIn}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/{{userId}}">Profile</a>
+                    <a class="nav-link" href="/users/{{user.id}}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/portfoliosAll">Portfolios</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
+                {{#if admin}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Create User</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/portfolios">Create Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sendEmail">Send email</a>
+                    </li>
+
+                {{/if}}
             {{else}}
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-            {{/if}}
-            {{#if admin}}
-                <li class="nav-item">
-                    <a class="nav-link" href="/sendEmail">Send email</a>
                 </li>
             {{/if}}
         </ul>

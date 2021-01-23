@@ -14,13 +14,13 @@ class SaveUser{
 // constructor
 class User {
   constructor(user) {
-    this.email = user.email;
+    this.email = user.email.toLowerCase();
     this.password = user.password;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
   }
   static create(newUser, result) {
-    this.findByEmail(newUser.email, (err,data) => {
+    this.findByEmail(newUser.email.toLowerCase(), (err,data) => {
       if (err) {
         const saveUser = new SaveUser(newUser);
         const saltRounds = 10;
@@ -80,12 +80,13 @@ class User {
     sql.query("SELECT * FROM users", (err, res) => {
       if (err) {
         console.log("error: ", err);
-        result(null, err);
+        result(err, null);
         return;
       }
-
-      console.log("users: ", res);
-      result(null, res);
+      else {
+        console.log("users: ", res);
+        result(null, res);
+      }
     });
   }
   static updateById(id, user, result) {

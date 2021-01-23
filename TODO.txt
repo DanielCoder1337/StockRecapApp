@@ -1,0 +1,16 @@
+TODO--->
+
+1. Portfolio which contains investors 
+2. Manually insert total value of portfolio if admin 
+3. Calculate profits/losses 
+4. Log where and when an investment occured
+
+
+
+
+------------------------------------------------------------
+To calculate profits
+->
+For example if 500kr is deposited and the value of the portfolio is now 1000. You take 1000 - the last deposit which is 500kr which is 
+500 left. Then take 500 and calculate everyones profit on this cut with each ones percentage. In this example its 100% so the profit was 500kr,
+but if the depositer only had 45% of the capital at the last deposit its 500 * 0.45 which then is the profit.

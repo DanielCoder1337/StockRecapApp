@@ -1,9 +1,9 @@
 const User = require("../models/users");
-const Login = require("../models/login");
-const loginController = require("./loginController");
+const login = require("../models/login");
 // Create and Save a new Customer
 exports.create = (req, res) => {
   // Validate request
+  if (!req.session.admin) res.render("home.hbs", {notif: {type: 'danger', message: "You are not eligible to register an account!"}})
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
@@ -33,7 +33,27 @@ exports.create = (req, res) => {
         });
       }
     else {
-      loginController.login();
+      login.login({email: user.email,password: user.password}, (err,result) => {
+        if (err) {
+          const model = {
+            notif: {type: 'warning', message: "Could not login!"}
+          }
+          res.render("home.hbs", model)
+        }
+        else {
+          req.session.loggedIn = true;
+          req.session.user = data;
+          if (req.session.user.email === "Admin@Admin.com"){
+              req.session.admin = true;
+          }
+          const model = {
+            notif: {
+              type: "success", message: "Successfully logged in!"
+            }
+          }
+          res.render("home.hbs", model)
+        }
+      })
     }
   });
 };
@@ -55,24 +75,18 @@ exports.findAll = (req, res) => {
         res.render("usersAll.hbs", model);
       }
   });
-
-
 };
 
-// Find a single Customer with a customerId
 exports.findOne = (req, res) => {
-  User.findById(req.params.customerId, (err, data) => {
+  User.findById(req.params.userId, (err, data) => {
         if (err) {
-            if (err.kind === "not_found") {
-            res.status(404).send({
-                message: `Not found User with id ${req.params.customerId}.`
-            });
-            } else {
-            res.status(500).send({
-                message: "Error retrieving User with id " + req.params.customerId
-            });
+            const model = {
+              notif: {type: 'warning', message: "Could not find user!"}
             }
-        } else res.send(data);
+            res.render("home.hbs",model)
+        } else{
+          res.render("user.hbs", data)
+        }
     });
 };
 

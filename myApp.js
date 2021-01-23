@@ -69,5 +69,6 @@ app.get("/", function (request, response) {
 require("./app/routes/email")(app);
 require("./app/routes/users")(app);
 require("./app/routes/login")(app);
+require("./app/routes/portfolios")(app);
 
 app.listen(PORT, HOST);

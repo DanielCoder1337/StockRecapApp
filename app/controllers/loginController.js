@@ -26,7 +26,7 @@ exports.login = (req,res) => {
             const model = {title:"Home!",notif:{type: "success", message:"Successfully logged in!"}, user: data}
             req.session.loggedIn = true;
             req.session.user = data;
-            if (req.session.user.email === "Admin@Admin.com"){
+            if (req.session.user.email === "admin@admin.com"){
                 req.session.admin = true;
             }
             res.render("home.hbs", model);

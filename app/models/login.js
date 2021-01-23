@@ -31,15 +31,3 @@ class Login {
 }
 module.exports = Login;
 
-
-
-//stockmarket 
-//autonoumus driving
-//
-
-//Global warming
-//Global garbage desposal
-//
-
-// Interested in helping people grow in financing, particular the stockmarket, hard to find people that want to accept help, therefor creating a website to market my idéa.
-// Want to earn money through stock financing, not big enough capital, trying to market to find investors.

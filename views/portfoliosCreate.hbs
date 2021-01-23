@@ -1,0 +1,31 @@
+<link href="signin.css" rel="stylesheet">
+
+{{#if admin}}
+    <div class="text-center">
+        <form action="/portfolios" method="POST" class="form-signin">
+            <img class="mb-4" src="LOGO" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Create a portfolio!</h1>
+            <label for="inputName" class="sr-only">Name of the portfolio</label>
+            <input type="text" id="inputName" class="form-control" name="name" placeholder="Name" required="" autofocus="">
+            <label for="inputValue" class="sr-only">Email address</label>
+            <input type="number" id="inputValue" class="form-control" name="value" placeholder="Value of the portfolio" required="" autofocus="">
+            <label for="Description">Description of the portfolio</label>
+            <div class="input-group">
+                <textarea type="text" class="form-control" id="description" name="description" rows="3"
+                    placeholder="Lorem Ipsum has been the industry'sstandard dummy text ever since the 1500s,
+                    when an unknown printertook a galley of type and scrambled it to make a type specimen book."
+                    required="true"></textarea>
+                <div class="invalid-feedback" style="width: 100%;">
+                    Content is required for the portfolio.
+                </div>
+            </div>
+            <hr class="mb-4">
+
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+            <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+        </form>
+    </div>
+{{else}}
+    <h1 class="h3 mb-3 font-weight-normal">You cannot create a portfolio as a normal user!</h1>
+{{/if}}
