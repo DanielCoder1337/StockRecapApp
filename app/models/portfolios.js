@@ -112,16 +112,19 @@ class Portfolio {
 
   static findUserInPortfolio(portfolioId, userId, result){
     sql.query(
-      "SELECT * FROM portfolio_subscriptions WHERE portfolioId = ? AND userId = ?",[portfolioId, userId], (err,res) =>{
+      "SELECT * FROM users u INNER JOIN portfolio_subscriptions r ON u.id=r.userId WHERE r.portfolioId = ? AND u.id = ?",[portfolioId, userId], (err,res) =>{
+        console.log(err,res)
         if (err){
           result({kind: "No such user in portfolio"}, null);
           return;
         }
         else if (res.length){
-          result(null, "user exists")
+          result(null, res)
+          return;
         }
         else {
           result({kind: "Nothing to search"},null)
+          return;
         }
       }
     )
@@ -131,9 +134,18 @@ class Portfolio {
     this.findById(portfolioId, (err, res)=>{
       var portf = res;
       portf.value = parseInt(newValue);
+      const investmentInfo = new Investment({
+        value: parseInt(newValue)-parseInt(res.value),
+        userId: 3,
+        portfolioId: portfolioId,
+        portfolioValue: portf.value
+      })
       this.updateById(portfolioId, portf, (err,updateResult)=>{
-        result(null, updateResult);
-        return;
+        Investment.create(investmentInfo, (err,investmentResult)=>{
+          console.log(err,investmentResult)
+          result(null, updateResult);
+          return;
+        })
       })
     })
   }
@@ -141,10 +153,10 @@ class Portfolio {
   static addInvestor(portfolioId, userId, investmentValue, result){
     this.findById(portfolioId, (err,portfolioResult) =>{
       if (investmentValue >= 0){
-        this.findUserInPortfolio(portfolioId, userId, (err,res) => {
+        this.findUserInPortfolio(portfolioId, userId, (err,userFound) => {
           if (err){
             sql.query(
-              "INSERT INTO portfolio_subscriptions SET ?",{portfolioId,userId,investedValue: investmentValue}, (err,res) => {
+              "INSERT INTO portfolio_subscriptions SET ?",{portfolioId,userId}, (err,res) => {
                 if (err){
                   result({kind: "Error adding user", portfolio: portfolioResult},null)
                   console.log(err)
@@ -172,8 +184,21 @@ class Portfolio {
             )
           }
           else {
-            result({kind: "User already exists in portfolio", portfolio: portfolioResult}, null)
-            return;
+            var portf = portfolioResult;
+            portf.value += parseInt(investmentValue);
+            const investmentInfo = new Investment({
+              value: investmentValue,
+              userId: userId,
+              portfolioId: portfolioId,
+              portfolioValue: portf.value
+            })
+            this.updateById(portfolioId, portf, (err,updateResult)=>{
+              Investment.create(investmentInfo, (err,investmentResult)=>{
+                console.log(err,investmentResult)
+                result(null, updateResult);
+                return;
+              })
+            })
           }
         });
       }

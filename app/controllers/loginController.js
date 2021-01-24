@@ -29,7 +29,7 @@ exports.login = (req,res) => {
             if (req.session.user.email === "admin@admin.com"){
                 req.session.admin = true;
             }
-            res.render("home.hbs", model);
+            res.redirect("/");
         }
     });
 }

@@ -22,3 +22,7 @@ but if the depositer only had 45% of the capital at the last deposit its 500 * 0
 
 --------------
 #Be able to request a new investing
+
+
+
+//Fixa ny investment när man uppdaterar värdet på totalen

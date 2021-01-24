@@ -37,40 +37,45 @@ class Investment {
   }
   static profit(userId,portfolioId, result){
     const Portfolio = require("./portfolios");
-    Portfolio.findUserInPortfolio(portfolioId,userId, (err,res)=>{
-      if (!err){
+    Portfolio.findUserInPortfolio(portfolioId,userId, (error,res)=>{
+      if (!error){
         sql.query(
           "SELECT * FROM investments WHERE portfolioId = ? ORDER BY date ASC", [portfolioId], (err,allInvestments)=>{
             Portfolio.findById(portfolioId, (err,portResult)=>{
-              const currentPortfolioValue = portResult.value
-              var userInvestedTotal = 0;
-              var totalInvested = 0;
-              var lastCountedAt = 0;
-              var profit = 0;
-              for (var i = 0; i < allInvestments.length; i++){
-                if (allInvestments[i].userId == userId){ // calculate profits to this point
-                  totalInvested+= allInvestments[i].value
-                  userInvestedTotal+= allInvestments[i].value
-                  let margin = ((allInvestments[i+1].portfolioValue - allInvestments[i+1].value) - totalInvested) - lastCountedAt;
-                  if (margin != 0) lastCountedAt = allInvestments[i].portfolioValue + margin;
-                  let userCut = userInvestedTotal / totalInvested;
-                  profit += margin * userCut;
+              if (allInvestments.length){
+                var userInvestedTotal = 0;
+                var totalInvested = 0;
+                var lastOffset = 0;
+                var profitCounted = 0;
+                var profit = 0;               
+                var startIndex = -1;     
+                for (var k = 0; k < allInvestments.length; k++){
+                  
+                  if (allInvestments[k].userId != 3){
+                    totalInvested += allInvestments[k].value;
+                  }
+                  if (allInvestments[k].userId == userId){
+                    userInvestedTotal += allInvestments[k].value;
+                    if (startIndex == -1)startIndex = k;
+                    if (lastOffset == 0)lastOffset += allInvestments[k].portfolioValue;
+                  }
+                  if (userInvestedTotal != 0 && startIndex != k){
+                    var userCut = userInvestedTotal / totalInvested;
+                    var margin = ((allInvestments[k].portfolioValue - allInvestments[k].value) - lastOffset) - profitCounted;
+                    lastOffset += allInvestments[k].value;
+                    profitCounted += margin
+                    profit += userCut * margin;
+                  }
                 }
-                else if (i == allInvestments.length-1){
-                  totalInvested+= allInvestments[i].value
-                  let margin = currentPortfolioValue - (totalInvested + lastCountedAt);
-                  lastCountedAt = allInvestments[i].portfolioValue + margin;
-                  let userCut = userInvestedTotal / totalInvested;
-                  profit += margin * userCut;
-                }
-                else {
-                  totalInvested+= allInvestments[i].value
-                }
+                totalInvested = totalInvested.toFixed(2);
+                profit = profit.toFixed(2);
+                userInvestedTotal = userInvestedTotal.toFixed(2);
+                result(null, {profit, totalInvested, userInvestedTotal})
               }
-              totalInvested = totalInvested.toFixed(2);
-              profit = profit.toFixed(2);
-              userInvestedTotal = userInvestedTotal.toFixed(2);
-              result(null, {profit, totalInvested, userInvestedTotal})
+              else {
+                result({kind: "err", portfolio: portResult})
+                return;
+              }
             })
           }
         )

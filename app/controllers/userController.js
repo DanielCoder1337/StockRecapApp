@@ -33,27 +33,30 @@ exports.create = (req, res) => {
         });
       }
     else {
-      login.login({email: user.email,password: user.password}, (err,result) => {
-        if (err) {
-          const model = {
-            notif: {type: 'warning', message: "Could not login!"}
-          }
-          res.render("home.hbs", model)
-        }
-        else {
-          req.session.loggedIn = true;
-          req.session.user = data;
-          if (req.session.user.email === "Admin@Admin.com"){
-              req.session.admin = true;
-          }
-          const model = {
-            notif: {
-              type: "success", message: "Successfully logged in!"
+      if (req.session.admin) res.redirect("/register")
+      else {
+        login.login({email: user.email,password: user.password}, (err,result) => {
+          if (err) {
+            const model = {
+              notif: {type: 'warning', message: "Could not login!"}
             }
+            res.render("home.hbs", model)
           }
-          res.render("home.hbs", model)
-        }
-      })
+          else {
+            req.session.loggedIn = true;
+            req.session.user = data;
+            if (req.session.user.email === "Admin@Admin.com"){
+                req.session.admin = true;
+            }
+            const model = {
+              notif: {
+                type: "success", message: "Successfully logged in!"
+              }
+            }
+            res.render("home.hbs", model)
+          }
+        })
+      }
     }
   });
 };

@@ -8,8 +8,8 @@ const session = require("express-session");
 const { MemoryStore } = require('express-session');
 
 // Constants
-const PORT = 8080;
-const HOST = '0.0.0.0';
+const PORT = 80;
+const HOST = '192.168.0.157';
 
 // App
 const app = express();
