@@ -79,10 +79,15 @@ exports.findOne = (req, res) => {
                         return;
                     }
                     else {
+                        var gain = false;
+                        if (result.profit > 0) gain = true;
+                        var totalValuation = parseInt(result.profit) + parseInt(result.userInvestedTotal);
                         const model = {
                             portfolio: data,
                             profitData:result,
-                            activeInvestor: true
+                            activeInvestor: true,
+                            totalValuation,
+                            gain
                         }
                         res.render("portfolio.hbs", model)
                         return;

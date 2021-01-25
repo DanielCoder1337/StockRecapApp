@@ -6,6 +6,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
 const { MemoryStore } = require('express-session');
+const https = require("https");
+const http = require("http")
+const fs = require("fs")
 
 // Constants
 const PORT = 80;
@@ -60,6 +63,15 @@ app.use(function (req,res,next){
     next();
 });
 
+app.use (function (req, res, next) {
+    if (req.secure) {
+            // request was via https, so do no special handling
+            next();
+    } else {
+            // request was via http, so redirect to https
+            res.redirect('https://' + req.headers.host + req.url);
+    }
+});
 
 app.get("/", function (request, response) {
     response.render("home.hbs")
@@ -71,4 +83,13 @@ require("./app/routes/users")(app);
 require("./app/routes/login")(app);
 require("./app/routes/portfolios")(app);
 
-app.listen(PORT, HOST);
+
+const options = {
+    key: fs.readFileSync('selfsigned.key'),
+    cert: fs.readFileSync('selfsigned.crt')
+}
+
+https.createServer(options,app).listen(443)
+http.createServer(app).listen(80);
+
+//app.listen(PORT, HOST);
