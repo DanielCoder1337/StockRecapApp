@@ -19,6 +19,7 @@
     "nodejs-nodemailer-outlook": "^1.2.3",
     "nodemailer": "^6.4.17",
     "nodemon": "^2.0.7",
+    "openssl": "^1.1.0",
     "redis": "^3.0.2"
   },
   "devDependencies": {},

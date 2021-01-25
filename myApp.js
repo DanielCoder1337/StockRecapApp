@@ -85,8 +85,8 @@ require("./app/routes/portfolios")(app);
 
 
 const options = {
-    key: fs.readFileSync('selfsigned.key'),
-    cert: fs.readFileSync('selfsigned.crt')
+    key: fs.readFileSync('realCert.key'),
+    cert: fs.readFileSync('www_ekerothinvest_se.crt')
 }
 
 https.createServer(options,app).listen(443)
